@@ -4,83 +4,73 @@ import 'package:crud_prova/models/pessoa.dart';
 import 'package:http/http.dart';
 
 class ApiService {
-  final String apiUrl = 'http://192.168.0.7:3000/api';
+  final String apiUrl =
+      'https://crudcrud.com/api/1e1b3dbd14d3435bb71e8c19fdf09ee1';
 
   Future<List<Pessoa>> getPessoas() async {
-    Response resposne = await get(Uri.https(apiUrl, '/pessoa'));
+    final response = await get(Uri.parse('$apiUrl/pessoa'));
 
-    if (resposne.statusCode == 200) {
-      List<dynamic> body = jsonDecode(resposne.body);
-      List<Pessoa> pessoas = body.map((item) => Pessoa.fromJson(item)).toList();
+    if (response.statusCode == 200) {
+      List<dynamic> body = json.decode(response.body);
+      List<Pessoa> pessoas = body.map((item) => Pessoa.fromMap(item)).toList();
       return pessoas;
     } else {
-      throw "Falha ao buscar lista de pessoas.";
+      throw Exception("Falha ao buscar lista de pessoas.");
     }
   }
 
   Future<Pessoa> getPessoaPorId(String id) async {
-    final response = await get(Uri.https(apiUrl, '/pessoa/$id'));
+    final response = await get(Uri.parse('$apiUrl/pessoa/$id'));
 
     if (response.statusCode == 200) {
-      return Pessoa.fromJson(json.decode(response.body));
+      final data = Pessoa.fromMap(json.decode(response.body));
+      return data;
     } else {
       throw Exception('Falha ao buscar pessoa.');
     }
   }
 
-  Future<Pessoa> criarPessoa(Pessoa pessoa) async {
-    Map data = {
-      'nome': pessoa.nome,
-      'sobrenome': pessoa.sobrenome,
-      'cpf': pessoa.cpf,
-      'dataNascimento': pessoa.dataNascimento,
-      'email': pessoa.email,
-    };
+  Future<bool> criarPessoa(Pessoa pessoa) async {
+    final data = pessoa.toJson();
 
-    final Response response = await post(
-      Uri.https(apiUrl, '/pessoa'),
+    final response = await post(
+      Uri.parse('$apiUrl/pessoa'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
-      body: jsonEncode(data),
+      body: data,
     );
     if (response.statusCode == 200) {
-      return Pessoa.fromJson(json.decode(response.body));
+      return true;
     } else {
       throw Exception('Falha para enviar pessoa.');
     }
   }
 
-  Future<Pessoa> updateCases(String id, Pessoa pessoa) async {
-    Map data = {
-      'nome': pessoa.nome,
-      'sobrenome': pessoa.sobrenome,
-      'cpf': pessoa.cpf,
-      'dataNascimento': pessoa.dataNascimento,
-      'email': pessoa.email,
-    };
+  Future<bool> updatePessoa(String id, Pessoa pessoa) async {
+    final data = pessoa.toJson();
 
     final Response response = await put(
-      Uri.https(apiUrl, '/pessoa/$id'),
+      Uri.parse('$apiUrl/pessoa/$id'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
-      body: jsonEncode(data),
+      body: data,
     );
     if (response.statusCode == 200) {
-      return Pessoa.fromJson(json.decode(response.body));
+      return true;
     } else {
       throw Exception('Falha para atualizar pessoa.');
     }
   }
 
-  Future<void> deleteCase(String id) async {
-    Response res = await delete(Uri.https(apiUrl, '/pessoa/$id'));
+  Future<bool> deletePessoa(String id) async {
+    final response = await delete(Uri.parse('$apiUrl/pessoa/$id'));
 
-    if (res.statusCode == 200) {
-      print("Pessoa removida");
+    if (response.statusCode == 200) {
+      return true;
     } else {
-      throw "Falha para deletar a pessoa.";
+      throw Exception("Falha para deletar a pessoa.");
     }
   }
 }

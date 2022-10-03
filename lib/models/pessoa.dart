@@ -20,18 +20,17 @@ class Pessoa {
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      'id': nome,
       'nome': nome,
       'sobrenome': sobrenome,
       'cpf': cpf,
       'email': email,
-      'dataNascimento': dataNascimento,
+      'dataNascimento': dataNascimento.toString(),
     };
   }
 
   factory Pessoa.fromMap(Map<String, dynamic> map) {
     return Pessoa(
-      id: map['id'] != null ? map['id'] as String : null,
+      id: map['_id'] != null ? map['_id'] as String : null,
       nome: map['nome'] != null ? map['nome'] as String : null,
       sobrenome: map['sobrenome'] != null ? map['sobrenome'] as String : null,
       cpf: map['cpf'] != null ? map['cpf'] as String : null,
