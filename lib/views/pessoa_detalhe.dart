@@ -161,7 +161,7 @@ class _PessoaDetalheState extends State<PessoaDetalhe> {
                             }
                           }).catchError((onError) {
                             ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text(onError)),
+                              SnackBar(content: Text(onError.toString())),
                             );
                           });
                         }
