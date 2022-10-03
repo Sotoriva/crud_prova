@@ -24,6 +24,9 @@ class _PessoaDetalheState extends State<PessoaDetalhe> {
 
   final _formKey = GlobalKey<FormState>();
 
+  // CRIE A VARIAVEL NORMAL SEM FINAL PARA ALTERAR O ESTADO
+  bool ativado = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -104,6 +107,17 @@ class _PessoaDetalheState extends State<PessoaDetalhe> {
                       label: Text('Data Nascimento'),
                       hintText: '2022-01-31',
                     ),
+                  ),
+                  const SizedBox(height: 16),
+                  Switch(
+                    value: ativado,
+                    onChanged: (value) {
+                      // PARA QUE AO MUDAR DE VALOR O ESTADO DO OBJETO MUDE USE
+                      // O SET STATE E ATRIBUA O VALOR A VARIAVEL
+                      setState(() {
+                        ativado = value;
+                      });
+                    },
                   ),
                   const SizedBox(height: 16),
                   ElevatedButton(
